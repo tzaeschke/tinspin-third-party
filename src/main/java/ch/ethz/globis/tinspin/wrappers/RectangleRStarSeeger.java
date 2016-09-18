@@ -11,6 +11,7 @@ import org.seeger.PPoint;
 import org.seeger.RTree;
 import org.seeger.SortedLinList;
 
+import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
 
 
@@ -23,13 +24,9 @@ public class RectangleRStarSeeger extends Candidate {
 	private final int dims;
 	private final int N;
 	
-	private RectangleRStarSeeger(int dims, int N) {
-		this.dims = dims;
-		this.N = N;
-	}
-	
-	public static RectangleRStarSeeger create(int dims, int N) {
-		return new RectangleRStarSeeger(dims, N);
+	public RectangleRStarSeeger(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override
