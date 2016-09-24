@@ -19,6 +19,8 @@ import org.xxl.xtree2.MapContainer;
 import org.xxl.xtree2.SortBasedBulkLoading;
 import org.xxl.xtree2.XTree;
 
+import ch.ethz.globis.tinspin.TestStats;
+
 
 
 /**
@@ -28,32 +30,24 @@ import org.xxl.xtree2.XTree;
  */
 public class PointXtree extends Candidate {
 
-
 	private XTree xtr;
 	
-	private final int DIM;
+	private final int dims;
 	private final int N;
 	
-	private double[] data;
-	
-	private PointXtree(int DIM, int N) {
-		this.DIM = DIM;
-		this.N = N;
-	}
-	
-	public static PointXtree create(int DIM, int N) {
-		return new PointXtree(DIM, N);
+	public PointXtree(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override
 	public void load(double[] data, int idxDim) {
-		this.data = data;
 		xtr = new XTree();
 		/* Factor which the minimum capacity of nodes is smaller than the maximum capacity. */
 		double minMaxFactor = 1.0/3.0;
 		int blockSize = 1536;
-		int dataSize = DIM*2*8+4; // DoublePointRectangle (2 doubles per dimension) + int
-		int descriptorSize = DIM*2*8; // DoublePointRectangle (2 doubles per dimension)
+		int dataSize = dims*2*8+4; // DoublePointRectangle (2 doubles per dimension) + int
+		int descriptorSize = dims*2*8; // DoublePointRectangle (2 doubles per dimension)
 		//boolean useMultiBlockContainer = true;//tree.equalsIgnoreCase("x");
 		int entrySize = Math.max(dataSize, descriptorSize+8);
 		int xTreeMaxCap = (blockSize - 6) / entrySize;
@@ -68,7 +62,7 @@ public class PointXtree extends Candidate {
 //		};
 		//TODO do we need to used a clone-container?
 		Container container = new MapContainer();
-		xtr.initialize(container, xTreeMinCap, xTreeMaxCap, DIM);
+		xtr.initialize(container, xTreeMinCap, xTreeMaxCap, dims);
 		int j = 0;
 		int p = N/100;
 		ArrayList<KPE> bulk = new ArrayList<KPE>(N);
@@ -136,9 +130,9 @@ public class PointXtree extends Candidate {
 
 	@Override
 	public int query(double[] min, double[] max) {
-		double[] lower = new double[DIM];
-		double[] upper = new double[DIM];
-		for (int i = 0; i < DIM; i++) {
+		double[] lower = new double[dims];
+		double[] upper = new double[dims];
+		for (int i = 0; i < dims; i++) {
 			lower[i] = min[i];
 			upper[i] = max[i];
 		}

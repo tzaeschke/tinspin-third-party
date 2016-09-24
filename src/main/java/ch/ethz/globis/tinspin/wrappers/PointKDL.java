@@ -7,6 +7,7 @@
 package ch.ethz.globis.tinspin.wrappers;
 
 import ch.ethz.globis.phtree.demo.PR_Entry;
+import ch.ethz.globis.tinspin.TestStats;
 import edu.wlu.cs.levy.CG.KDTree;
 import edu.wlu.cs.levy.CG.KeyDuplicateException;
 import edu.wlu.cs.levy.CG.KeyMissingException;
@@ -25,13 +26,9 @@ public class PointKDL extends Candidate {
 	
 	private double[] data;
 	
-	private PointKDL(int DIM, int N) {
-		this.dims = DIM;
-		this.N = N;
-	}
-	
-	public static PointKDL create(int dims, int N) {
-		return new PointKDL(dims, N);
+	public PointKDL(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override

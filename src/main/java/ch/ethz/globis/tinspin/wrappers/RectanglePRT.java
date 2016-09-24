@@ -27,33 +27,28 @@ public class RectanglePRT extends Candidate {
 	private static int BRANCH_FACTOR = 30;
 	
 	private final PRTree<PR_Entry> prt;
-	private final int DIM;
+	private final int dims;
 	private final int N;
 	
 	/**
-	 * Setup of a native PH tree
+	 * Setup of a priority R-Tree.
 	 * 
-	 * @param N total number of points that will be loaded
-	 * @param DIM number of dimensions
+	 * @param ts test configuration
 	 */
-	public RectanglePRT(int N, int DIM) {
-		prt = new PRTree<PR_Entry>(new PR_PR_RangeConverter(DIM), BRANCH_FACTOR);
-		this.N = N;
-		this.DIM = DIM;
-	}
-	
-	public static RectanglePRT create(int DIM, int N) {
-		return new RectanglePRT(N, DIM);
+	public RectanglePRT(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
+		prt = new PRTree<PR_Entry>(new PR_PR_RangeConverter(dims), BRANCH_FACTOR);
 	}
 	
 	@Override
 	public void load(double[] data, int dims) {
 		ArrayList<PR_Entry> data2 = new ArrayList<PR_Entry>(N);
-		double[] buf1 = new double[DIM];
-		double[] buf2 = new double[DIM];
+		double[] buf1 = new double[dims];
+		double[] buf2 = new double[dims];
 		for (int i = 0; i < N; i++) {
-			System.arraycopy(data, i*DIM*2, buf1, 0, DIM);
-			System.arraycopy(data, i*DIM*2+DIM, buf2, 0, DIM);
+			System.arraycopy(data, i*dims*2, buf1, 0, dims);
+			System.arraycopy(data, i*dims*2+dims, buf2, 0, dims);
 			data2.add(new PR_Entry(buf1, buf2));
 		}
 		prt.load(data2);

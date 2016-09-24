@@ -13,6 +13,7 @@ import com.savarese.spatial.NearestNeighbors;
 
 import ch.ethz.globis.phtree.demo.PR_Entry;
 import ch.ethz.globis.phtree.demo.PR_KDS_DoublePoint;
+import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
 
 
@@ -31,13 +32,9 @@ public class PointKDS extends Candidate {
 	
 	private double[] data;
 	
-	private PointKDS(int dims, int N) {
-		this.dims = dims;
-		this.N = N;
-	}
-	
-	public static PointKDS create(int dims, int N) {
-		return new PointKDS(dims, N);
+	public PointKDS(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override
@@ -149,13 +146,6 @@ public class PointKDS extends Candidate {
 		return e;
 	}
 	
-	public static void main(String[] args) {
-		int N = 1*1000*1000;
-		int dims = 3;
-		Candidate x = create(dims, N);
-		x.run(x, N, dims);
-	}
-
 	@Override
 	public void release() {
 		// nothing to be done

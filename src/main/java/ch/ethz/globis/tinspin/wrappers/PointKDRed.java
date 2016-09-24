@@ -16,6 +16,7 @@ import ags.utils.dataStructures.trees.thirdGenKD.KdTree;
 import ags.utils.dataStructures.trees.thirdGenKD.NearestNeighborIterator;
 import ags.utils.dataStructures.trees.thirdGenKD.SquareEuclideanDistanceFunction;
 import ch.ethz.globis.phtree.demo.PR_KDS_DoublePoint;
+import ch.ethz.globis.tinspin.TestStats;
 
 
 /**
@@ -33,14 +34,10 @@ public class PointKDRed extends Candidate {
 	private final int N;
 	private SquareEuclideanDistanceFunction edf;
 	
-	private PointKDRed(int dims, int N) {
-		this.dims = dims;
-		this.N = N;
+	public PointKDRed(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 		this.edf = new SquareEuclideanDistanceFunction();
-	}
-	
-	public static PointKDRed create(int dims, int N) {
-		return new PointKDRed(dims, N);
 	}
 	
 	@Override
@@ -133,13 +130,6 @@ public class PointKDRed extends Candidate {
 //		}
 //		return e;
 //	}
-	
-	public static void main(String[] args) {
-		int N = 1*1000*1000;
-		int dims = 3;
-		Candidate x = create(dims, N);
-		x.run(x, N, dims);
-	}
 
 	@Override
 	public void release() {

@@ -14,6 +14,7 @@ import org.ardverk.collection.Cursor;
 import org.ardverk.collection.IntArrayKeyAnalyzer;
 
 import ch.ethz.globis.phtree.util.BitTools;
+import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
 
 /**
@@ -24,19 +25,15 @@ public class PointCBF extends Candidate {
 
 	private MCritBitTree<int[], Object> cbf;
 	
-	private final int DIM;
+	private final int dims;
 	private final int DEPTH = 64;
 	private final int N;
 	
 	private double[] data;
 	
-	private PointCBF(int DIM, int N) {
-		this.DIM = DIM;
-		this.N = N;
-	}
-	
-	public static PointCBF create(int DIM, int N) {
-		return new PointCBF(DIM, N);
+	public PointCBF(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override
@@ -60,10 +57,10 @@ public class PointCBF extends Candidate {
 	@Override
 	public long[][] preparePointQuery(double[][] qA) {
 		long[][] r = new long[qA.length][];
-		long[] val = new long[DIM];
+		long[] val = new long[dims];
 		for (int i = 0; i < qA.length; i++) {
 			double[] q = qA[i];
-			for (int d = 0; d < DIM; d++) {
+			for (int d = 0; d < dims; d++) {
 				val[d] = BitTools.toSortableLong(q[d]);
 			}
 			r[i] = val; 
@@ -92,9 +89,9 @@ public class PointCBF extends Candidate {
 	
 	@Override
 	public int query(double[] min, double[] max) {
-		final long[] lower = new long[DIM];
-		final long[] upper = new long[DIM];
-		for (int i = 0; i < DIM; i++) {
+		final long[] lower = new long[dims];
+		final long[] upper = new long[dims];
+		for (int i = 0; i < dims; i++) {
 			lower[i] = BitTools.toSortableLong(min[i]);
 			upper[i] = BitTools.toSortableLong(max[i]);
 		}
@@ -140,9 +137,9 @@ public class PointCBF extends Candidate {
 					//keys are equal up to here, check further...
 				}
 
-				long[] val = BitTools.split(DIM, DEPTH, key);
+				long[] val = BitTools.split(dims, DEPTH, key);
 				boolean match = true;
-				for (int d = 0; d < DIM; d++) {
+				for (int d = 0; d < dims; d++) {
 					if (val[d] < lower[d] || val[d] > upper[d]) {
 						match = false;
 						break;
@@ -168,7 +165,7 @@ public class PointCBF extends Candidate {
 	@Override
 	public int unload() {
 		int n = 0;
-		long[] e = new long[DIM];
+		long[] e = new long[dims];
 		for (int i = 0; i < N>>1; i++) {
 			n += cbf.remove(getEntryInt(e, i)) != null ? 1 : 0;
 			n += cbf.remove(getEntryInt(e, N-i-1)) != null ? 1 : 0;
@@ -177,20 +174,12 @@ public class PointCBF extends Candidate {
 	}
 
 	private int[] getEntryInt(long[] buf, int pos) {
-		for (int d = 0; d < DIM; d++) {
-			buf[d] = BitTools.toSortableLong(data[pos*DIM+d]); 
+		for (int d = 0; d < dims; d++) {
+			buf[d] = BitTools.toSortableLong(data[pos*dims+d]); 
 		}
 		
 		int[] key = BitTools.merge(DEPTH, buf);
 		return key;
-	}
-
-	
-	public static void main(String[] args) {
-		int N = 1*1000*1000;
-		int DIM = 3;
-		Candidate x = create(DIM, N);
-		x.run(x, N, DIM);
 	}
 	
 	@Override
@@ -215,7 +204,7 @@ public class PointCBF extends Candidate {
 	
 	private int[] toKey(double[] src) {
 		long[] buf = new long[src.length];
-		for (int d = 0; d < DIM; d++) {
+		for (int d = 0; d < dims; d++) {
 			buf[d] = BitTools.toSortableLong(src[d]); 
 		}
 		return BitTools.merge(DEPTH, buf);

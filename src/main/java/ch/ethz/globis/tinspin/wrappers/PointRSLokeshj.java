@@ -8,6 +8,7 @@ package ch.ethz.globis.tinspin.wrappers;
 
 import java.util.List;
 
+import ch.ethz.globis.tinspin.TestStats;
 import lokeshj.rstar3.RStarTree;
 import lokeshj.rstar3.spatial.SpatialPoint;
 
@@ -23,13 +24,9 @@ public class PointRSLokeshj extends Candidate {
 	private final int dims;
 	private final int N;
 	
-	private PointRSLokeshj(int dims, int N) {
-		this.dims = dims;
-		this.N = N;
-	}
-	
-	public static PointRSLokeshj create(int dims, int N) {
-		return new PointRSLokeshj(dims, N);
+	public PointRSLokeshj(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override

@@ -19,6 +19,8 @@ import org.xxl.xtree2.MapContainer;
 import org.xxl.xtree2.SortBasedBulkLoading;
 import org.xxl.xtree2.XTree;
 
+import ch.ethz.globis.tinspin.TestStats;
+
 
 
 /**
@@ -34,20 +36,13 @@ public class RectangleXtree extends Candidate {
 	private final int DIM;
 	private final int N;
 	
-	private double[] data;
-	
-	private RectangleXtree(int DIM, int N) {
-		this.DIM = DIM;
-		this.N = N;
-	}
-	
-	public static RectangleXtree create(int DIM, int N) {
-		return new RectangleXtree(DIM, N);
+	public RectangleXtree(TestStats ts) {
+		this.DIM = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 	}
 	
 	@Override
 	public void load(double[] data, int idxDim) {
-		this.data = data;
 		xtr = new XTree();
 		/* Factor which the minimum capacity of nodes is smaller than the maximum capacity. */
 		double minMaxFactor = 1.0/3.0;
@@ -179,12 +174,10 @@ public class RectangleXtree extends Candidate {
 		xtr.clear();
 		return N;
 	}
-
-	public static void main(String[] args) {
-		int N = 1*1000*1000;
-		int DIM = 3;
-		Candidate x = create(DIM, N);
-		x.run(x, N, DIM);
+	
+	@Override
+	public boolean supportsUnload() {
+		return false;
 	}
 
 	@Override

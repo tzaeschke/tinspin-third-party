@@ -37,9 +37,9 @@ public class PointPRTree extends Candidate {
 	private final int dims;
 	private final int N;
 	
-	private PointPRTree(int dims, int N) {
-		this.dims = dims;
-		this.N = N;
+	public PointPRTree(TestStats ts) {
+		this.dims = ts.cfgNDims;
+		this.N = ts.cfgNEntries;
 		dc = (PR_Entry t, PointND p) -> {
 			double dist = 0;
 			double[] data = t.data();
@@ -49,10 +49,6 @@ public class PointPRTree extends Candidate {
 			}
 			return Math.sqrt(dist);
 		};
-	}
-
-	public static PointPRTree create(int dims, int N) {
-		return new PointPRTree(dims, N);
 	}
 
 	@Override
@@ -133,13 +129,6 @@ public class PointPRTree extends Candidate {
 		return true;
 	}
 	
-	public static void main(String[] args) {
-		int N = 1*1000*1000;
-		int dims = 3;
-		Candidate x = create(dims, N);
-		x.run(x, N, dims);
-	}
-
 	@Override
 	public void release() {
 		// nothing to be done
