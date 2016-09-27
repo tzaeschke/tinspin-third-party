@@ -15,7 +15,10 @@ import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
 
 
-
+/**
+ * Wrapper for R*Tree by Seeger:
+ * http://chorochronos.datastories.org/
+ */
 public class RectangleRStarSeeger extends Candidate {
 
 
@@ -136,7 +139,8 @@ public class RectangleRStarSeeger extends Candidate {
 	
 	@Override
 	public boolean supportsKNN() {
-		return true;
+		//disabled because of wrong results, see PointRStar
+		return false;
 	}
 	
 	@Override

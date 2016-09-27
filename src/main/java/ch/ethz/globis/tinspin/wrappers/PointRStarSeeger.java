@@ -116,15 +116,27 @@ public class PointRStarSeeger extends Candidate {
 
 	@Override
 	public double knnQuery(int k, double[] center) {
-		SortedLinList res = new SortedLinList();
 		PPoint p = new PPoint(center);
+		//This causes NPEs...
+//		if (k==1) {
+//			PPoint result = new PPoint(dims);
+//			rt.NearestNeighborQuery(p, result);
+//			return result.dist();
+//		}
+		
+		SortedLinList res = new SortedLinList();
 		rt.k_NearestNeighborQuery(p, k, res);
 		double totalDist = 0;
 		int n = 0;
         for (Object obj = res.get_first(); obj != null; obj = res.get_next()) {
         	Data d = (Data) obj;
-        	totalDist += Math.sqrt(d.distanz);
+        	totalDist += dist(center, d.data);
+        	//The 'distanz' does not match at all with the actual distance...
+        	//totalDist += Math.sqrt(d.distanz);
         	n++;
+        	if (n==k) {
+        		break;
+        	}
         }
         if (n < k) {
         	throw new IllegalStateException("n/k=" + n + "/" + k);
@@ -134,7 +146,8 @@ public class PointRStarSeeger extends Candidate {
 	
 	@Override
 	public boolean supportsKNN() {
-		return true;
+		//disabled because of wrong results
+		return false;
 	}
 	
 	@Override
