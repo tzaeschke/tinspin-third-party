@@ -6,10 +6,12 @@
  */
 package ch.ethz.globis.tinspin.wrappers;
 
-import org.seeger.Data;
-import org.seeger.PPoint;
-import org.seeger.RTree;
-import org.seeger.SortedLinList;
+import java.util.ArrayList;
+
+import org.seeger2.Data;
+import org.seeger2.PPoint;
+import org.seeger2.RTree;
+import org.seeger2.SortedLinList;
 
 import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
@@ -71,13 +73,13 @@ public class PointRStarSeeger extends Candidate {
 
 	@Override
 	public int pointQuery(Object qA) {
-//		double[][] a = (double[][]) qA;
-//		int n = 0;
-//		
+		double[][] a = (double[][]) qA;
+		int n = 0;
+		
 //		SortedLinList res = new SortedLinList();
 //		double[] mbr = new double[dims*2];
 //		
-//		for (int i = 0; i < a.length; i+=2) {
+		for (int i = 0; i < a.length; i++) {
 //			double[] min = a[i];
 //			double[] max = a[i+1];
 //			for (int d = 0; d < dims; d++) {
@@ -93,7 +95,7 @@ public class PointRStarSeeger extends Candidate {
 //				}
 //			}
 //			//log("q=" + Arrays.toString(q));
-//		}
+		}
 //		return n;
 		return -1;
 	}
@@ -116,20 +118,18 @@ public class PointRStarSeeger extends Candidate {
 
 	@Override
 	public double knnQuery(int k, double[] center) {
-		PPoint p = new PPoint(center);
-		//This causes NPEs...
-//		if (k==1) {
-//			PPoint result = new PPoint(dims);
-//			rt.NearestNeighborQuery(p, result);
-//			return result.dist();
-//		}
+		if (k==1) {
+			//their NN search works only correct for k=1
+			PPoint p = new PPoint(center);
+			PPoint result = new PPoint(dims);
+			rt.NearestNeighborQuery(p, result);
+			return result.dist();
+		}
 		
-		SortedLinList res = new SortedLinList();
-		rt.k_NearestNeighborQuery(p, k, res);
+		ArrayList<Data> r = rt.kNearestNeighbourSearch(center, k);
 		double totalDist = 0;
 		int n = 0;
-        for (Object obj = res.get_first(); obj != null; obj = res.get_next()) {
-        	Data d = (Data) obj;
+        for (Data d: r) {
         	totalDist += dist(center, d.data);
         	//The 'distanz' does not match at all with the actual distance...
         	//totalDist += Math.sqrt(d.distanz);
@@ -146,7 +146,6 @@ public class PointRStarSeeger extends Candidate {
 	
 	@Override
 	public boolean supportsKNN() {
-		//disabled because of wrong results
 		return false;
 	}
 	

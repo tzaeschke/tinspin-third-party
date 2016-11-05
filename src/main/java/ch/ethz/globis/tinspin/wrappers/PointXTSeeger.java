@@ -7,6 +7,7 @@
 package ch.ethz.globis.tinspin.wrappers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.seegerx.Data;
 import org.seegerx.XTree;
@@ -55,46 +56,25 @@ public class PointXTSeeger extends Candidate {
 	
 	@Override
 	public double[][] preparePointQuery(double[][] qA) {
-//		DoublePointRectangle[] r = new DoublePointRectangle[qA.length];
-//		for (int i = 0; i < qA.length; i++) {
-//			double[] q = qA[i];
-//			double[] q2 = new double[DIM];
-//			for (int d = 0; d < DIM; d++) {
-//				q2[d] = q[d] + E;
-//			}
-//			r[i] = new DoublePointRectangle(q, q2);
-//		}
-//		return r;
 		return qA;
 	}
 
 	@Override
 	public int pointQuery(Object qA) {
-//		double[][] a = (double[][]) qA;
-//		int n = 0;
-//		
-//		SortedLinList res = new SortedLinList();
-//		double[] mbr = new double[dims*2];
-//		
-//		for (int i = 0; i < a.length; i+=2) {
-//			double[] min = a[i];
-//			double[] max = a[i+1];
-//			for (int d = 0; d < dims; d++) {
-//				mbr[2*d] = min[d];
-//				mbr[2*d+1] = max[d];
-//			}
-//			xtr.rangeQuery(mbr, res);
-//			for (Object obj = res.get_first(); obj != null; obj = res.get_next()) {
-//				Data d = (Data) obj;
-//				if (Arrays.equals(d.data, mbr)) {
-//					n++;
-//					break;
-//				}
-//			}
-//			//log("q=" + Arrays.toString(q));
-//		}
-//		return n;
-		return -1;
+		double[][] a = (double[][]) qA;
+		int n = 0;
+
+		for (int i = 0; i < a.length; i++) {
+			Data r = rt.pointQuery(a[i]);
+			if (r != null) {
+				if (Arrays.equals(r.getCords(), a[i])) {
+					n++;
+				} else {
+					throw new IllegalStateException();
+				}
+			}
+		}
+		return n;
 	}
 
 	@Override
@@ -110,6 +90,7 @@ public class PointXTSeeger extends Candidate {
 	@Override
 	public double knnQuery(int k, double[] center) {
 		if (k == 1) {
+			//their NN search works only correct for k=1
 			Data queryPoint = new Data(center);
 			Data result = new Data(dims);
 			rt.nearest_neighbour_search(queryPoint, result);

@@ -6,10 +6,12 @@
  */
 package ch.ethz.globis.tinspin.wrappers;
 
-import org.seeger.Data;
-import org.seeger.PPoint;
-import org.seeger.RTree;
-import org.seeger.SortedLinList;
+import java.util.ArrayList;
+
+import org.seeger2.Data;
+import org.seeger2.PPoint;
+import org.seeger2.RTree;
+import org.seeger2.SortedLinList;
 
 import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
@@ -121,15 +123,25 @@ public class RectangleRStarSeeger extends Candidate {
 
 	@Override
 	public double knnQuery(int k, double[] center) {
-		SortedLinList res = new SortedLinList();
-		PPoint p = new PPoint(center);
-		rt.k_NearestNeighborQuery(p, k, res);
+		if (k==1) {
+			//their NN search works only correct for k=1
+			PPoint p = new PPoint(center);
+			PPoint result = new PPoint(dims);
+			rt.NearestNeighborQuery(p, result);
+			return result.dist();
+		}
+		
+		ArrayList<Data> r = rt.kNearestNeighbourSearch(center, k);
 		double totalDist = 0;
 		int n = 0;
-        for (Object obj = res.get_first(); obj != null; obj = res.get_next()) {
-        	Data d = (Data) obj;
-        	totalDist += Math.sqrt(d.distanz);
+        for (Data d: r) {
+        	totalDist += dist(center, d.data);
+        	//The 'distanz' does not match at all with the actual distance...
+        	//totalDist += Math.sqrt(d.distanz);
         	n++;
+        	if (n==k) {
+        		break;
+        	}
         }
         if (n < k) {
         	throw new IllegalStateException("n/k=" + n + "/" + k);
