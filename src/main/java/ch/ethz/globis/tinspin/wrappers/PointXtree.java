@@ -188,7 +188,12 @@ public class PointXtree extends Candidate {
 	
 	@Override
 	public boolean supportsUpdate() {
-		//This is just too slow
-		return true;
+		//This is just too slow (and it fails for 1M entries)
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return xtr.toString();
 	}
 }

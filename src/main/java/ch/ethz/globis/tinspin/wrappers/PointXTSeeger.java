@@ -109,12 +109,12 @@ public class PointXTSeeger extends Candidate {
 
 	@Override
 	public double knnQuery(int k, double[] center) {
-		//This causes NPEs...
-//		if (k==1) {
-//			PPoint result = new PPoint(dims);
-//			rt.NearestNeighborQuery(p, result);
-//			return result.dist();
-//		}
+		if (k == 1) {
+			Data queryPoint = new Data(center);
+			Data result = new Data(dims);
+			rt.nearest_neighbour_search(queryPoint, result);
+			return result.distance();
+		}
 		
 		ArrayList<Data> ret = rt.kNearestNeighbourSearch(center, k);
 		double totalDist = 0;
@@ -130,8 +130,7 @@ public class PointXTSeeger extends Candidate {
         	}
         }
         if (n < k) {
-        	//throw new IllegalStateException("n/k=" + n + "/" + k);
-        	System.out.println("ERROR: n/k=" + n + "/" + k);
+        	throw new IllegalStateException("n/k=" + n + "/" + k);
         }
 		return totalDist;
 	}

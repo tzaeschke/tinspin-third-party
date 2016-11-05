@@ -212,6 +212,6 @@ public class RectangleXtree extends Candidate {
 	
 	@Override
 	public String toString() {
-		return "X-Tree(XXL)";
+		return xtr.toString();
 	}
 }
