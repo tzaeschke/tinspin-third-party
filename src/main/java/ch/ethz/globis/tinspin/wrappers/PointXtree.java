@@ -18,6 +18,7 @@ import org.xxl.xtree2.KPE;
 import org.xxl.xtree2.MapContainer;
 import org.xxl.xtree2.SortBasedBulkLoading;
 import org.xxl.xtree2.XTree;
+import org.xxl.xtree2.XTree.XTStats;
 
 import ch.ethz.globis.tinspin.TestStats;
 
@@ -34,6 +35,8 @@ public class PointXtree extends Candidate {
 	
 	private final int dims;
 	private final int N;
+	private int minCapacity;
+	private int maxCapacity;
 	
 	public PointXtree(TestStats ts) {
 		this.dims = ts.cfgNDims;
@@ -50,8 +53,8 @@ public class PointXtree extends Candidate {
 		int descriptorSize = dims*2*8; // DoublePointRectangle (2 doubles per dimension)
 		//boolean useMultiBlockContainer = true;//tree.equalsIgnoreCase("x");
 		int entrySize = Math.max(dataSize, descriptorSize+8);
-		int xTreeMaxCap = (blockSize - 6) / entrySize;
-		int xTreeMinCap = (int) (xTreeMaxCap * minMaxFactor);
+		maxCapacity = (blockSize - 6) / entrySize;
+		minCapacity = (int) (maxCapacity * minMaxFactor);
 //		Function<KPE, DoublePointRectangle> GET_DESCRIPTOR = new AbstractFunction<KPE, DoublePointRectangle>() {
 //			public DoublePointRectangle invoke (KPE o) {
 //				return ((KPE)o).getKey(); 
@@ -62,7 +65,7 @@ public class PointXtree extends Candidate {
 //		};
 		//TODO do we need to used a clone-container?
 		Container container = new MapContainer();
-		xtr.initialize(container, xTreeMinCap, xTreeMaxCap, dims);
+		xtr.initialize(container, minCapacity, maxCapacity, dims);
 		int j = 0;
 		int p = N/100;
 		ArrayList<KPE> bulk = new ArrayList<KPE>(N);
@@ -193,7 +196,18 @@ public class PointXtree extends Candidate {
 	}
 	
 	@Override
+	public void getStats(TestStats S) {
+		XTStats s = xtr.getStats();
+		S.statNnodes = s.nNodes;
+		//super nodes
+		S.statNNodeAHC = s.nSNodes;
+		S.statNpostlen = s.depth;
+	}
+	
+	@Override
 	public String toString() {
-		return xtr.toString();
+		return xtr.toString() + 
+				";minCapacity=" + minCapacity + 
+				";maxCapacity=" + maxCapacity;
 	}
 }

@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import org.seegerx.Data;
 import org.seegerx.XTree;
+import org.xxl.xtree2.XTree.XTStats;
 
 import ch.ethz.globis.tinspin.TestStats;
 
@@ -157,6 +158,14 @@ public class PointXTSeeger extends Candidate {
 	@Override
 	public boolean supportsUpdate() {
 		return false;
+	}
+	
+	@Override
+	public void getStats(TestStats S) {
+		S.statNnodes = rt.getNodeCount();
+		//super nodes
+		//S.statNNodeAHC = s.getNodeCOuntnSNodes;
+		S.statNpostlen = rt.getDepth();
 	}
 	
 	@Override

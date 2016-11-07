@@ -7,6 +7,7 @@
 package ch.ethz.globis.tinspin.wrappers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.seeger2.Data;
 import org.seeger2.PPoint;
@@ -58,16 +59,6 @@ public class PointRStarSeeger extends Candidate {
 	
 	@Override
 	public double[][] preparePointQuery(double[][] qA) {
-//		DoublePointRectangle[] r = new DoublePointRectangle[qA.length];
-//		for (int i = 0; i < qA.length; i++) {
-//			double[] q = qA[i];
-//			double[] q2 = new double[DIM];
-//			for (int d = 0; d < DIM; d++) {
-//				q2[d] = q[d] + E;
-//			}
-//			r[i] = new DoublePointRectangle(q, q2);
-//		}
-//		return r;
 		return qA;
 	}
 
@@ -75,29 +66,19 @@ public class PointRStarSeeger extends Candidate {
 	public int pointQuery(Object qA) {
 		double[][] a = (double[][]) qA;
 		int n = 0;
-		
-//		SortedLinList res = new SortedLinList();
-//		double[] mbr = new double[dims*2];
-//		
+
 		for (int i = 0; i < a.length; i++) {
-//			double[] min = a[i];
-//			double[] max = a[i+1];
-//			for (int d = 0; d < dims; d++) {
-//				mbr[2*d] = min[d];
-//				mbr[2*d+1] = max[d];
-//			}
-//			xtr.rangeQuery(mbr, res);
-//			for (Object obj = res.get_first(); obj != null; obj = res.get_next()) {
-//				Data d = (Data) obj;
-//				if (Arrays.equals(d.data, mbr)) {
-//					n++;
-//					break;
-//				}
-//			}
-//			//log("q=" + Arrays.toString(q));
+			Data r = rt.pointQueryP(a[i]);
+			if (r != null) {
+				if (Arrays.equals(r.getCordsPoint(), a[i])) {
+					n++;
+				} else {
+					throw new IllegalStateException();
+				}
+			}
 		}
-//		return n;
-		return -1;
+		System.out.println(n); //TODO
+		return n;
 	}
 
 	@Override
@@ -184,6 +165,14 @@ public class PointRStarSeeger extends Candidate {
 	@Override
 	public boolean supportsUpdate() {
 		return false;
+	}
+	
+	@Override
+	public void getStats(TestStats S) {
+		S.statNnodes = rt.getNodeCount();
+		//super nodes
+		//S.statNNodeAHC = s.getNodeCOuntnSNodes;
+		//S.statNpostlen = rt.getDepth();
 	}
 	
 	@Override
