@@ -7,6 +7,7 @@
 package ch.ethz.globis.tinspin.wrappers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.seeger2.Data;
 import org.seeger2.PPoint;
@@ -78,31 +79,21 @@ public class RectangleRStarSeeger extends Candidate {
 
 	@Override
 	public int pointQuery(Object qA) {
-//		double[][] a = (double[][]) qA;
-//		int n = 0;
-//		
-//		SortedLinList res = new SortedLinList();
-//		double[] mbr = new double[dims*2];
-//		
-//		for (int i = 0; i < a.length; i+=2) {
-//			double[] min = a[i];
-//			double[] max = a[i+1];
-//			for (int d = 0; d < dims; d++) {
-//				mbr[2*d] = min[d];
-//				mbr[2*d+1] = max[d];
-//			}
-//			xtr.rangeQuery(mbr, res);
-//			for (Object obj = res.get_first(); obj != null; obj = res.get_next()) {
-//				Data d = (Data) obj;
-//				if (Arrays.equals(d.data, mbr)) {
-//					n++;
-//					break;
-//				}
-//			}
-//			//log("q=" + Arrays.toString(q));
-//		}
-//		return n;
-		return -1;
+		double[][] a = (double[][]) qA;
+		int n = 0;
+
+		for (int i = 0; i < a.length; i+=2) {
+			Data r = rt.pointQueryR(a[i], a[i+1]);
+			if (r != null) {
+				if (Arrays.equals(r.getCordsRectLow(), a[i])
+						&& Arrays.equals(r.getCordsRectUpp(), a[i+1])) {
+					n++;
+				} else {
+					throw new IllegalStateException();
+				}
+			}
+		}
+		return n;
 	}
 
 	@Override
@@ -152,7 +143,7 @@ public class RectangleRStarSeeger extends Candidate {
 	@Override
 	public boolean supportsKNN() {
 		//disabled because of wrong results, see PointRStar
-		return false;
+		return true;
 	}
 	
 	@Override

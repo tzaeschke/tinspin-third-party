@@ -77,7 +77,6 @@ public class PointRStarSeeger extends Candidate {
 				}
 			}
 		}
-		System.out.println(n); //TODO
 		return n;
 	}
 
