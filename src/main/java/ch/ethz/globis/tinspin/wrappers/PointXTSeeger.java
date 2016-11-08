@@ -11,7 +11,6 @@ import java.util.Arrays;
 
 import org.seegerx.Data;
 import org.seegerx.XTree;
-import org.xxl.xtree2.XTree.XTStats;
 
 import ch.ethz.globis.tinspin.TestStats;
 

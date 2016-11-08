@@ -153,7 +153,7 @@ public class RectangleXtree extends Candidate {
 //	@Override
 //	public double knnQuery(int k, double[] center) {
 //		SortedLinList res = new SortedLinList();
-//		PPoint p = new PPoint(center);
+//		DataPoint p = new DataPoint(center);
 //		xtr.rt.k_NearestNeighborQuery(p, k, res);
 //		double totalDist = 0;
 //		int n = 0;

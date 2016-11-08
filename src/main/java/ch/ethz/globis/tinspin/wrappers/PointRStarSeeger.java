@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.seeger2.Data;
-import org.seeger2.PPoint;
+import org.seeger2.DataPoint;
 import org.seeger2.RTree;
 import org.seeger2.SortedLinList;
 
@@ -100,17 +100,17 @@ public class PointRStarSeeger extends Candidate {
 	public double knnQuery(int k, double[] center) {
 		if (k==1) {
 			//their NN search works only correct for k=1
-			PPoint p = new PPoint(center);
-			PPoint result = new PPoint(dims);
+			DataPoint p = new DataPoint(center);
+			DataPoint result = new DataPoint(dims);
 			rt.NearestNeighborQuery(p, result);
-			return result.dist();
+			return result.distance();
 		}
 		
 		ArrayList<Data> r = rt.kNearestNeighbourSearch(center, k);
 		double totalDist = 0;
 		int n = 0;
         for (Data d: r) {
-        	totalDist += dist(center, d.data);
+        	totalDist += dist(center, d.getCordsPoint());
         	//The 'distanz' does not match at all with the actual distance...
         	//totalDist += Math.sqrt(d.distanz);
         	n++;
@@ -126,7 +126,7 @@ public class PointRStarSeeger extends Candidate {
 	
 	@Override
 	public boolean supportsKNN() {
-		return false;
+		return true;
 	}
 	
 	@Override
