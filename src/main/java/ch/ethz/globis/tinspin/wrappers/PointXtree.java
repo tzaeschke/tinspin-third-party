@@ -47,14 +47,16 @@ public class PointXtree extends Candidate {
 	public void load(double[] data, int idxDim) {
 		xtr = new XTree();
 		/* Factor which the minimum capacity of nodes is smaller than the maximum capacity. */
-		double minMaxFactor = 1.0/3.0;
-		int blockSize = 1536;
-		int dataSize = dims*2*8+4; // DoublePointRectangle (2 doubles per dimension) + int
-		int descriptorSize = dims*2*8; // DoublePointRectangle (2 doubles per dimension)
-		//boolean useMultiBlockContainer = true;//tree.equalsIgnoreCase("x");
-		int entrySize = Math.max(dataSize, descriptorSize+8);
-		maxCapacity = (blockSize - 6) / entrySize;
-		minCapacity = (int) (maxCapacity * minMaxFactor);
+//		double minMaxFactor = 1.0/3.0;
+//		int blockSize = 8192;//1536;//4096;//1536;
+//		int dataSize = dims*2*8+4; // DoublePointRectangle (2 doubles per dimension) + int
+//		int descriptorSize = dims*2*8; // DoublePointRectangle (2 doubles per dimension)
+//		//boolean useMultiBlockContainer = true;//tree.equalsIgnoreCase("x");
+//		int entrySize = Math.max(dataSize, descriptorSize+8);
+//		maxCapacity = (blockSize - 6) / entrySize;
+//		minCapacity = (int) (maxCapacity * minMaxFactor);
+		maxCapacity = 30;
+		minCapacity = 10;
 //		Function<KPE, DoublePointRectangle> GET_DESCRIPTOR = new AbstractFunction<KPE, DoublePointRectangle>() {
 //			public DoublePointRectangle invoke (KPE o) {
 //				return ((KPE)o).getKey(); 
@@ -116,19 +118,20 @@ public class PointXtree extends Candidate {
 
 	@Override
 	public int pointQuery(Object qA) {
-		DoublePointRectangle[] a = (DoublePointRectangle[]) qA;
-		int n = 0;
-		for (DoublePointRectangle q: a) {
-			if (xtr.get(q) != null) {
-				n++;
-			}
-			//log("q=" + Arrays.toString(q));
-			//This is just too slow
-			if (n == 1000) {
-				break;
-			}
-		}
-		return n;
+//		DoublePointRectangle[] a = (DoublePointRectangle[]) qA;
+//		int n = 0;
+//		for (DoublePointRectangle q: a) {
+//			if (xtr.get(q) != null) {
+//				n++;
+//			}
+//			//log("q=" + Arrays.toString(q));
+//			//This is just too slow
+//			if (n == 1000) {
+//				break;
+//			}
+//		}
+//		return n;
+		return -1;
 	}
 
 	@Override

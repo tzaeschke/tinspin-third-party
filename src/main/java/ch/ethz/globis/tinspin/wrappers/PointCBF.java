@@ -170,6 +170,10 @@ public class PointCBF extends Candidate {
 			n += cbf.remove(getEntryInt(e, i)) != null ? 1 : 0;
 			n += cbf.remove(getEntryInt(e, N-i-1)) != null ? 1 : 0;
 		}
+		if ((N%2) != 0) {
+			int i = (N>>1);
+			n += cbf.remove(getEntryInt(e, i)) != null ? 1 : 0;
+		}
 		return n;
 	}
 

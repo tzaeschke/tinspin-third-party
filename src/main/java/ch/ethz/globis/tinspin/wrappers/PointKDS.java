@@ -136,6 +136,10 @@ public class PointKDS extends Candidate {
 			n += kds.remove(getEntry(e, i)) != null ? 1 : 0;
 			n += kds.remove(getEntry(e, N-i-1)) != null ? 1 : 0;
 		}
+		if ((N%2) != 0) {
+			int i = (N>>1);
+			n += kds.remove(getEntry(e, N-i-1)) != null ? 1 : 0;
+		}
 		return n;
 	}
 

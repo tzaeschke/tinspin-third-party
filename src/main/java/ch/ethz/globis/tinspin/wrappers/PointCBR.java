@@ -120,6 +120,10 @@ public class PointCBR extends Candidate {
 			n += cbr.remove(getEntryInt(e, i)) != null ? 1 : 0;
 			n += cbr.remove(getEntryInt(e, N-i-1)) != null ? 1 : 0;
 		}
+		if ((N%2) != 0) {
+			int i = (N>>1);
+			n += cbr.remove(getEntryInt(e, i)) != null ? 1 : 0;
+		}
 		return n;
 	}
 

@@ -115,14 +115,18 @@ public class PointKDL extends Candidate {
 	public int unload() {
 		int n = 0;
 		double[] e = new double[dims];
-		for (int i = 0; i < N>>1; i++) {
-			try {
+		try {
+			for (int i = 0; i < N>>1; i++) {
 				kdl.delete(getEntry(e, i));
 				kdl.delete(getEntry(e, N-i-1));
 				n+=2;
-			} catch (KeySizeException | KeyMissingException e1) {
-				throw new RuntimeException(e1);
 			}
+			if ((N%2) != 0) {
+				int i = (N>>1);
+				kdl.delete(getEntry(e, N-i-1));
+			}
+		} catch (KeySizeException | KeyMissingException e1) {
+			throw new RuntimeException(e1);
 		}
 		return n;
 	}

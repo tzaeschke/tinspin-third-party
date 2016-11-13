@@ -119,6 +119,10 @@ public class PointKDRed extends Candidate {
 //			n += kds.remove(getEntry(e, i)) != null ? 1 : 0;
 //			n += kds.remove(getEntry(e, N-i-1)) != null ? 1 : 0;
 //		}
+//		if ((N%2) != 0) {
+//			int i = (N>>1);
+//			kdl.delete(getEntry(e, N-i-1));
+//		}
 //		return n;
 		System.err.println("deletion not supported!");
 		return N;
