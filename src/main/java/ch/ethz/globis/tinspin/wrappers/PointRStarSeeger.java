@@ -9,10 +9,10 @@ package ch.ethz.globis.tinspin.wrappers;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.seeger2.Data;
-import org.seeger2.DataPoint;
-import org.seeger2.RTree;
-import org.seeger2.SortedLinList;
+import org.seeger3.Data;
+import org.seeger3.DataPoint;
+import org.seeger3.RTree;
+import org.seeger3.SortedLinList;
 
 import ch.ethz.globis.tinspin.TestStats;
 import ch.ethz.globis.tinspin.wrappers.Candidate;

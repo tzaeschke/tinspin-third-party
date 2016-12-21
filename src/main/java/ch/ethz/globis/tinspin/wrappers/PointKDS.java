@@ -14,6 +14,7 @@ import com.savarese.spatial.NearestNeighbors;
 import ch.ethz.globis.phtree.demo.PR_Entry;
 import ch.ethz.globis.phtree.demo.PR_KDS_DoublePoint;
 import ch.ethz.globis.tinspin.TestStats;
+import ch.ethz.globis.tinspin.TestStats.TST;
 import ch.ethz.globis.tinspin.wrappers.Candidate;
 
 
@@ -29,12 +30,14 @@ public class PointKDS extends Candidate {
 	
 	private final int dims;
 	private final int N;
+	private boolean isCluster;
 	
 	private double[] data;
 	
 	public PointKDS(TestStats ts) {
 		this.dims = ts.cfgNDims;
 		this.N = ts.cfgNEntries;
+		this.isCluster = TST.CLUSTER.equals(ts.TEST);
 	}
 	
 	@Override
@@ -98,6 +101,12 @@ public class PointKDS extends Candidate {
 			n++;
 		}
 		return n;
+	}
+	
+	@Override
+	public boolean supportsWindowQuery() {
+		//Cluster requires >250000 ns/query object == 1hour
+		return !isCluster;//N <= 10000000;
 	}
 
 	@Override
