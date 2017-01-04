@@ -161,4 +161,11 @@ public class PointCBR extends Candidate {
 	public boolean supportsUpdate() {
 		return false;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "PatriciaTrie";
+	}
+
 }

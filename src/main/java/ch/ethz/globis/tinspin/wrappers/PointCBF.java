@@ -214,5 +214,10 @@ public class PointCBF extends Candidate {
 		return BitTools.merge(DEPTH, buf);
 	}
 	
+	
+	@Override
+	public String toString() {
+		return "MCritBitTree";
+	}
 
 }
