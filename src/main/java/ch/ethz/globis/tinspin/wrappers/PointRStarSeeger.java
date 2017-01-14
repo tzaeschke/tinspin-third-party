@@ -167,6 +167,11 @@ public class PointRStarSeeger extends Candidate {
 	}
 	
 	@Override
+	public boolean supportsUnload() {
+		return false;
+	}
+	
+	@Override
 	public void getStats(TestStats S) {
 		S.statNnodes = rt.getNodeCount();
 		//super nodes

@@ -171,6 +171,10 @@ public class RectangleRStarSeeger extends Candidate {
 	}
 	
 	@Override
+	public boolean supportsUnload() {
+		return false;
+	}
+	@Override
 	public String toString() {
 		return rt.toString();
 	}
