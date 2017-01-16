@@ -106,7 +106,7 @@ public class PointKDS extends Candidate {
 	@Override
 	public boolean supportsWindowQuery() {
 		//Cluster requires >250000 ns/query object == 1hour
-		return !isCluster;//N <= 10000000;
+		return !isCluster || N <= 5000000;
 	}
 
 	@Override
