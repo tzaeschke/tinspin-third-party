@@ -37,7 +37,7 @@ public class PointKDS extends Candidate {
 	public PointKDS(TestStats ts) {
 		this.dims = ts.cfgNDims;
 		this.N = ts.cfgNEntries;
-		this.isCluster = TST.CLUSTER.equals(ts.TEST);
+		this.isCluster = TST.CLUSTER.equals(ts.TEST) && ts.param1 < 5.0;
 	}
 	
 	@Override
@@ -105,8 +105,8 @@ public class PointKDS extends Candidate {
 	
 	@Override
 	public boolean supportsWindowQuery() {
-		//Cluster requires >250000 ns/query object == 1hour
-		return !isCluster || N <= 5000000;
+		//Cluster 3.4 / 3.5 requires >250000 ns/query object == 1hour
+		return !isCluster || N <= 1000000;
 	}
 
 	@Override
