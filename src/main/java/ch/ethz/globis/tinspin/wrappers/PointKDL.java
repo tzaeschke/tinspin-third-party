@@ -8,7 +8,6 @@ package ch.ethz.globis.tinspin.wrappers;
 
 import ch.ethz.globis.phtree.demo.PR_Entry;
 import ch.ethz.globis.tinspin.TestStats;
-import ch.ethz.globis.tinspin.TestStats.TST;
 import edu.wlu.cs.levy.CG.KDTree;
 import edu.wlu.cs.levy.CG.KeyDuplicateException;
 import edu.wlu.cs.levy.CG.KeyMissingException;
@@ -31,7 +30,7 @@ public class PointKDL extends Candidate {
 	public PointKDL(TestStats ts) {
 		this.dims = ts.cfgNDims;
 		this.N = ts.cfgNEntries;
-		this.isCluster = TST.CLUSTER.equals(ts.TEST) && ts.param1 < 5.0;
+		this.isCluster = ts.TEST.name().startsWith("CLUSTER") && ts.param1 < 5.0;
 	}
 	
 	@Override
